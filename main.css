@@ -1,9 +1,115 @@
-/*Playlist de musicas*/
-#lista-musicas {
-  padding: 20px;
-  }
-  .musica {
+.musica {
   margin-bottom: 20px;
   border-bottom: 1px solid #ccc;
   padding-bottom: 10px;
-  }
+}
+
+#playlist-container {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  padding-left: 100px;
+  padding-right: 100px;
+}
+
+.container-musicas {
+  display: flex;
+  justify-content: space-between;
+}
+
+.moment-musicas {
+  width: 25%;
+  background-color: red;
+}
+
+.filtro-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 20px;
+  margin-bottom: 20px;
+  justify-content: center
+}
+
+.select-filtro {
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  width: 20%;
+}
+
+.botao-filtrar {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+  background-color: #8E8E8E;
+  color: #fff;
+  cursor: pointer;
+}
+
+.botao-reset {
+  padding: 8px 16px;
+  border: 1px solid #8E8E8E;
+  border-radius: 8px;
+  background-color: #fff;
+  cursor: pointer;
+}
+
+.lista-musicas {
+  width: 70%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.musica-card {
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+}
+
+.musica-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.musica-card .info {
+  padding: 16px;
+}
+
+.musica-card .info h3 {
+  margin: 0 0 8px;
+  font-size: 18px;
+}
+
+.musica-card .info p {
+  margin: 0 0 6px;
+  color: #555;
+}
+
+.botoes {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.estilo-tag {
+  padding: 6px 12px;
+  background-color: #8E8E8E;
+  color: #fff;
+  border-radius: 12px;
+  font-size: 14px;
+}
+
+.botoes a {
+  padding: 6px 12px;
+  border: 1px solid #8E8E8E;
+  border-radius: 20px;
+  font-size: 14px;
+  text-decoration: none;
+  color: #8E8E8E;
+}
