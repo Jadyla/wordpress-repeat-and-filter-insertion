@@ -1,0 +1,9 @@
+/*Playlist de musicas*/
+#lista-musicas {
+  padding: 20px;
+  }
+  .musica {
+  margin-bottom: 20px;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 10px;
+  }
