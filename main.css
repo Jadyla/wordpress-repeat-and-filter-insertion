@@ -1,8 +1,4 @@
-.musica {
-  margin-bottom: 20px;
-  border-bottom: 1px solid #ccc;
-  padding-bottom: 10px;
-}
+/* Container Principal */
 
 #playlist-container {
   margin-top: 20px;
@@ -11,16 +7,14 @@
   padding-right: 100px;
 }
 
-.container-musicas {
-  display: flex;
-  justify-content: space-between;
+@media (max-width: 600px) {
+  #playlist-container {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
 }
 
-.moment-musicas {
-  width: 25%;
-  background-color: red;
-}
-
+/* Filtro */
 .filtro-wrapper {
   display: flex;
   align-items: center;
@@ -54,11 +48,77 @@
   cursor: pointer;
 }
 
+@media (max-width: 600px) {
+  .select-filtro {
+    width: 50%;
+  }
+}
+
+/* Container de Momentos e Lista de Musicas*/
+.container-musicas {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: space-between;
+}
+
+@media (max-width: 600px) {
+  .container-musicas {
+    display: block;
+  }
+}
+
+/* Momentos */
+.moment-musicas {
+  width: 25%;
+  display: flex;
+  gap: 28px;
+  flex-direction: column;
+}
+
+.moment-musicas div {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-content: center;
+  text-align: center;
+  align-items: center;
+  min-width: 100px;
+}
+
+.moment-musicas div img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50px;
+}
+
+.moment-musicas div img:hover {
+  scale: 1.1;
+  transition-duration: 600ms;
+}
+
+@media (max-width: 600px) {
+  .moment-musicas {
+    width: 100%;
+    display: flex;
+    gap: 24px;
+    flex-direction: row;
+    margin-bottom: 24px;
+    overflow-y: scroll;
+  }
+}
+
+/* Lista de Musica */
 .lista-musicas {
   width: 70%;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 20px;
+}
+
+@media (max-width: 600px) {
+  .lista-musicas {
+    width: 100%;
+  }
 }
 
 .musica-card {
