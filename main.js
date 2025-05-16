@@ -140,11 +140,11 @@ document.addEventListener("DOMContentLoaded", function () {
   botaoFiltrar.addEventListener("click", () => {
     const estiloSelecionado = select.value;
     const filtradas = musicas.filter(m => m.estilo === estiloSelecionado);
-    renderizarMusicas(filtradas, containerLista);
+    renderizarMusicas(containerPrincipal, filtradas, containerLista);
   });
 
   botaoReset.addEventListener("click", () => {
-    renderizarMusicas(musicas, containerLista);
+    renderizarMusicas(containerPrincipal, musicas, containerLista);
   });
 
   // Container de Lista de Musicas e Momentos
@@ -164,17 +164,28 @@ document.addEventListener("DOMContentLoaded", function () {
   momentDiv.className = "moment-musicas";
   container.appendChild(momentDiv);
 
-  criaBotaoMomento(musicas, containerLista, momentDiv, "ENTRADA DO NOIVO", "https://picsum.photos/100/100", "entrada_noivo")
-  criaBotaoMomento(musicas, containerLista, momentDiv, "ENTRADA DOS PAIS", "https://picsum.photos/100/100", "entrada_pais")
-  criaBotaoMomento(musicas, containerLista, momentDiv, "ENTRADA DA NOIVA", "https://picsum.photos/100/100", "entrada_noiva")
-  criaBotaoMomento(musicas, containerLista, momentDiv, "ENTRADA DAS ALIANÇAS", "https://picsum.photos/100/100", "entrada_aliancas")
+  criaBotaoMomento(containerPrincipal, musicas, containerLista, momentDiv, "ENTRADA DO NOIVO", "https://picsum.photos/100/100", "entrada_noivo")
+  criaBotaoMomento(containerPrincipal, musicas, containerLista, momentDiv, "ENTRADA DOS PAIS", "https://picsum.photos/100/100", "entrada_pais")
+  criaBotaoMomento(containerPrincipal, musicas, containerLista, momentDiv, "ENTRADA DA NOIVA", "https://picsum.photos/100/100", "entrada_noiva")
+  criaBotaoMomento(containerPrincipal, musicas, containerLista, momentDiv, "ENTRADA DAS ALIANÇAS", "https://picsum.photos/100/100", "entrada_aliancas")
+  criaBotaoMomento(containerPrincipal, musicas, containerLista, momentDiv, "ENTRADA DOS PADRINHOS", "https://picsum.photos/100/100", "entrada_padrinhos")
+  criaBotaoMomento(containerPrincipal, musicas, containerLista, momentDiv, "FLORISTAS", "https://picsum.photos/100/100", "floristas")
 
-  renderizarMusicas(musicas, containerLista);
+  renderizarMusicas(containerPrincipal, musicas, containerLista);
 });
 
-function renderizarMusicas(lista, containerLista) {
+function renderizarMusicas(containerPrincipal, lista, containerLista, paginaAtual = 1, itensPorPagina = 6) {
   containerLista.innerHTML = "";
-  lista.forEach((musica) => {
+
+  if(!lista) return
+
+  const totalPaginas = Math.ceil(lista.length / itensPorPagina);
+  const inicio = (paginaAtual - 1) * itensPorPagina;
+  const fim = inicio + itensPorPagina;
+  const paginaMusicas = lista?.slice(inicio, fim);
+
+
+  paginaMusicas.forEach((musica) => {
     const item = document.createElement("div");
     item.className = "musica-card";
 
@@ -192,9 +203,30 @@ function renderizarMusicas(lista, containerLista) {
     `;
     containerLista.appendChild(item);
   });
+
+  // Paginação
+  const paginacao = document.getElementById("paginacao") || document.createElement("div");
+  paginacao.innerHTML = "";
+  paginacao.className = "paginacao";
+  paginacao.id = "paginacao";
+
+  for (let i = 1; i <= totalPaginas; i++) {
+    const botao = document.createElement("button");
+    botao.textContent = i;
+    botao.className = "botao-pagina";
+    if (i === paginaAtual) {
+      botao.classList.add("ativo");
+    }
+    botao.addEventListener("click", () => {
+      renderizarMusicas(containerPrincipal, lista, containerLista, i, itensPorPagina);
+    });
+    paginacao.appendChild(botao);
+  }
+
+  containerPrincipal.insertAdjacentElement("afterend", paginacao);
 }
 
-function criaBotaoMomento(musicas, containerLista, momentDiv, txt, img, id){
+function criaBotaoMomento(containerPrincipal, musicas, containerLista, momentDiv, txt, img, id) {
   const el = document.createElement("div");
   const elImg = document.createElement("img");
   const elSpan = document.createElement("spam");
@@ -206,6 +238,6 @@ function criaBotaoMomento(musicas, containerLista, momentDiv, txt, img, id){
   momentDiv.appendChild(el);
   el.addEventListener("click", () => {
     const filtradas = musicas.filter(m => m.momento === id);
-    renderizarMusicas(filtradas, containerLista);
+    renderizarMusicas(containerPrincipal, filtradas, containerLista);
   });
 }
