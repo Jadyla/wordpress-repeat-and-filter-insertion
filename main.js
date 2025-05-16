@@ -164,12 +164,12 @@ document.addEventListener("DOMContentLoaded", function () {
   momentDiv.className = "moment-musicas";
   container.appendChild(momentDiv);
 
-  criaBotaoMomento(containerPrincipal, musicas, containerLista, momentDiv, "ENTRADA DO NOIVO", "https://picsum.photos/100/100", "entrada_noivo")
-  criaBotaoMomento(containerPrincipal, musicas, containerLista, momentDiv, "ENTRADA DOS PAIS", "https://picsum.photos/100/100", "entrada_pais")
-  criaBotaoMomento(containerPrincipal, musicas, containerLista, momentDiv, "ENTRADA DA NOIVA", "https://picsum.photos/100/100", "entrada_noiva")
-  criaBotaoMomento(containerPrincipal, musicas, containerLista, momentDiv, "ENTRADA DAS ALIANÇAS", "https://picsum.photos/100/100", "entrada_aliancas")
-  criaBotaoMomento(containerPrincipal, musicas, containerLista, momentDiv, "ENTRADA DOS PADRINHOS", "https://picsum.photos/100/100", "entrada_padrinhos")
-  criaBotaoMomento(containerPrincipal, musicas, containerLista, momentDiv, "FLORISTAS", "https://picsum.photos/100/100", "floristas")
+  criaBotaoMomento(containerPrincipal, musicas, containerLista, momentDiv, "ENTRADA DO NOIVO", "entrada_noivo.png", "entrada_noivo")
+  criaBotaoMomento(containerPrincipal, musicas, containerLista, momentDiv, "ENTRADA DOS PAIS", "entrada_pais.png", "entrada_pais")
+  criaBotaoMomento(containerPrincipal, musicas, containerLista, momentDiv, "ENTRADA DA NOIVA", "entrada_noiva-scaled.jpg", "entrada_noiva")
+  criaBotaoMomento(containerPrincipal, musicas, containerLista, momentDiv, "ENTRADA DAS ALIANÇAS", "entrada_aliancas-scaled.jpg", "entrada_aliancas")
+  criaBotaoMomento(containerPrincipal, musicas, containerLista, momentDiv, "ENTRADA DOS PADRINHOS", "entrada_padrinhos-scaled.jpg", "entrada_padrinhos")
+  criaBotaoMomento(containerPrincipal, musicas, containerLista, momentDiv, "FLORISTAS", "floristas-scaled.jpg", "floristas")
 
   renderizarMusicas(containerPrincipal, musicas, containerLista);
 });
@@ -231,7 +231,7 @@ function criaBotaoMomento(containerPrincipal, musicas, containerLista, momentDiv
   const elImg = document.createElement("img");
   const elSpan = document.createElement("spam");
   elSpan.innerHTML = txt
-  elImg.src = img
+  elImg.src = `https://institutomusicaldanilomenezes.com/wp-content/uploads/2025/05/${img}`
   el.id = id
   el.appendChild(elImg)
   el.appendChild(elSpan)
