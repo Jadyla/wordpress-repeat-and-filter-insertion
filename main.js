@@ -4,6 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
     {
       nome: "Stand by Me",
       momento: "entrada_noivo",
+      descricao: "Loren Ipsum Siat Teme Me Loren Ipsum Siat Teme Me Loren Teme Me Loren Ipsum Siat Teme Me Loren Ipsum Siat Teme Me",
       estilo: "Moderna",
       artista: "Banda A",
       video: "https://www.youtube.com/watch?v=xxxxxx",
@@ -12,6 +13,7 @@ document.addEventListener("DOMContentLoaded", function () {
     {
       nome: "Radio",
       momento: "entrada_noivo",
+      descricao: "Loren Ipsum Siat Teme Me Loren Ipsum Siat Teme Me Loren Teme Me Loren Ipsum Siat Teme Me Loren Ipsum Siat Teme Me",
       estilo: "Cristã",
       artista: "Cantora B",
       video: "https://www.youtube.com/watch?v=yyyyyy",
@@ -20,6 +22,7 @@ document.addEventListener("DOMContentLoaded", function () {
     {
       nome: "Born to Die",
       momento: "entrada_noiva",
+      descricao: "Loren Ipsum Siat Teme Me Loren Ipsum Siat Teme Me Loren Teme Me Loren Ipsum Siat Teme Me Loren Ipsum Siat Teme Me",
       estilo: "Pop",
       artista: "Artista C",
       video: "https://www.youtube.com/watch?v=zzzzzz",
@@ -28,6 +31,7 @@ document.addEventListener("DOMContentLoaded", function () {
     {
       nome: "All with forever",
       momento: "entrada_noiva",
+      descricao: "Loren Ipsum Siat Teme Me Loren Ipsum Siat Teme Me Loren Teme Me Loren Ipsum Siat Teme Me Loren Ipsum Siat Teme Me",
       estilo: "Moderna",
       artista: "Banda A",
       video: "https://www.youtube.com/watch?v=xxxxxx",
@@ -36,6 +40,7 @@ document.addEventListener("DOMContentLoaded", function () {
     {
       nome: "Running",
       momento: "entrada_noiva",
+      descricao: "Loren Ipsum Siat Teme Me Loren Ipsum Siat Teme Me Loren Teme Me Loren Ipsum Siat Teme Me Loren Ipsum Siat Teme Me",
       estilo: "Cristã",
       artista: "Cantora B",
       video: "https://www.youtube.com/watch?v=yyyyyy",
@@ -44,6 +49,7 @@ document.addEventListener("DOMContentLoaded", function () {
     {
       nome: "Phorograth",
       momento: "entrada_pais",
+      descricao: "Loren Ipsum Siat Teme Me Loren Ipsum Siat Teme Me Loren Teme Me Loren Ipsum Siat Teme Me Loren Ipsum Siat Teme Me",
       estilo: "Pop",
       artista: "Artista C",
       video: "https://www.youtube.com/watch?v=zzzzzz",
@@ -52,6 +58,7 @@ document.addEventListener("DOMContentLoaded", function () {
     {
       nome: "Algo parecido",
       momento: "entrada_pais",
+      descricao: "Loren Ipsum Siat Teme Me Loren Ipsum Siat Teme Me Loren Teme Me Loren Ipsum Siat Teme Me Loren Ipsum Siat Teme Me",
       estilo: "Indie",
       artista: "Banda A",
       video: "https://www.youtube.com/watch?v=xxxxxx",
@@ -60,6 +67,7 @@ document.addEventListener("DOMContentLoaded", function () {
     {
       nome: "Céu azul",
       momento: "entrada_pais",
+      descricao: "Loren Ipsum Siat Teme Me Loren Ipsum Siat Teme Me Loren Teme Me Loren Ipsum Siat Teme Me Loren Ipsum Siat Teme Me",
       estilo: "Cristã",
       artista: "Cantora B",
       video: "https://www.youtube.com/watch?v=yyyyyy",
@@ -68,6 +76,7 @@ document.addEventListener("DOMContentLoaded", function () {
     {
       nome: "Never gonna be Alone",
       momento: "entrada_noivo",
+      descricao: "Loren Ipsum Siat Teme Me Loren Ipsum Siat Teme Me Loren Teme Me Loren Ipsum Siat Teme Me Loren Ipsum Siat Teme Me",
       estilo: "Pop",
       artista: "Artista C",
       video: "https://www.youtube.com/watch?v=zzzzzz",
@@ -76,6 +85,7 @@ document.addEventListener("DOMContentLoaded", function () {
     {
       nome: "Lost yourself",
       momento: "entrada_aliancas",
+      descricao: "Loren Ipsum Siat Teme Me Loren Ipsum Siat Teme Me Loren Teme Me Loren Ipsum Siat Teme Me Loren Ipsum Siat Teme Me",
       estilo: "Moderna",
       artista: "Banda A",
       video: "https://www.youtube.com/watch?v=xxxxxx",
@@ -84,6 +94,7 @@ document.addEventListener("DOMContentLoaded", function () {
     {
       nome: "Love me and forever",
       momento: "entrada_aliancas",
+      descricao: "Loren Ipsum Siat Teme Me Loren Ipsum Siat Teme Me Loren Teme Me Loren Ipsum Siat Teme Me Loren Ipsum Siat Teme Me",
       estilo: "Cristã",
       artista: "Cantora B",
       video: "https://www.youtube.com/watch?v=yyyyyy",
@@ -92,9 +103,9 @@ document.addEventListener("DOMContentLoaded", function () {
     {
       nome: "Me amo",
       momento: "entrada_noiva",
+      descricao: "Loren Ipsum Siat Teme Me Loren Ipsum Siat Teme Me Loren Teme Me Loren Ipsum Siat Teme Me Loren Ipsum Siat Teme Me",
       estilo: "Pop",
       artista: "Artista C",
-      video: "https://www.youtube.com/watch?v=zzzzzz",
       imagem: "https://picsum.photos/400/300"
     }
   ];
@@ -135,15 +146,38 @@ document.addEventListener("DOMContentLoaded", function () {
   filtroWrapper.appendChild(select);
   filtroWrapper.appendChild(botaoFiltrar);
   filtroWrapper.appendChild(botaoReset);
+
+  const searchTextContainer = document.createElement("div");
+  searchTextContainer.className = "search-text-wrapper";
+
+  const inputSearchText = document.createElement("input");
+  inputSearchText.id = "input-search-text";
+  inputSearchText.type = "text"
+  inputSearchText.placeholder = "Pesquisar..."
+  inputSearchText.className = "input-search-text";
+
+  searchTextContainer.appendChild(inputSearchText);
+
+  containerPrincipal.appendChild(searchTextContainer);
+
+  inputSearchText.addEventListener("input", (e) => {
+    const value = e.target.value;
+    const filtradas = musicas.filter(m => m.nome.toLowerCase().includes(value.toLowerCase())
+    || m.descricao.toLowerCase().includes(value.toLowerCase()));
+    renderizarMusicas(containerPrincipal, filtradas, containerLista);
+  });
+
   containerPrincipal.appendChild(filtroWrapper);
 
   botaoFiltrar.addEventListener("click", () => {
+    inputSearchText.value = ""
     const estiloSelecionado = select.value;
     const filtradas = musicas.filter(m => m.estilo === estiloSelecionado);
     renderizarMusicas(containerPrincipal, filtradas, containerLista);
   });
 
   botaoReset.addEventListener("click", () => {
+    inputSearchText.value = ""
     renderizarMusicas(containerPrincipal, musicas, containerLista);
   });
 
@@ -170,6 +204,7 @@ document.addEventListener("DOMContentLoaded", function () {
   criaBotaoMomento(containerPrincipal, musicas, containerLista, momentDiv, "ENTRADA DAS ALIANÇAS", "entrada_aliancas-scaled.jpg", "entrada_aliancas")
   criaBotaoMomento(containerPrincipal, musicas, containerLista, momentDiv, "ENTRADA DOS PADRINHOS", "entrada_padrinhos-scaled.jpg", "entrada_padrinhos")
   criaBotaoMomento(containerPrincipal, musicas, containerLista, momentDiv, "FLORISTAS", "floristas-scaled.jpg", "floristas")
+  // TODO: Adicionar mais entradas
 
   renderizarMusicas(containerPrincipal, musicas, containerLista);
 });
@@ -193,11 +228,12 @@ function renderizarMusicas(containerPrincipal, lista, containerLista, paginaAtua
       <img src="${musica.imagem}" alt="${musica.nome}">
       <div class="info">
         <h3>${musica.nome}</h3>
+        <p>${musica.descricao.length > 75 ? ( musica.descricao.substring(0, 75) + '...' ) : musica.descricao}</p>
         <p><strong>Estilo:</strong> ${musica.estilo}</p>
         <p><strong>Artista:</strong> ${musica.artista}</p>
         <div class="botoes">
           <span class="estilo-tag">${musica.estilo}</span>
-          <a href="${musica.video}" target="_blank">Assistir vídeo</a>
+          ${musica?.video ? '<a href="' + musica.video + '" target="_blank">Assistir vídeo</a>' : ''}
         </div>
       </div>
     `;
