@@ -1,114 +1,16 @@
-document.addEventListener("DOMContentLoaded", function () {
-  // Listagem de musicas, TODO: Pegar da Planilha
-  const musicas = [
-    {
-      nome: "Stand by Me",
-      momento: "entrada_noivo",
-      descricao: "Loren Ipsum Siat Teme Me Loren Ipsum Siat Teme Me Loren Teme Me Loren Ipsum Siat Teme Me Loren Ipsum Siat Teme Me",
-      estilo: "Moderna",
-      artista: "Banda A",
-      video: "https://www.youtube.com/watch?v=xxxxxx",
-      imagem: "https://picsum.photos/400/300"
-    },
-    {
-      nome: "Radio",
-      momento: "entrada_noivo",
-      descricao: "Loren Ipsum Siat Teme Me Loren Ipsum Siat Teme Me Loren Teme Me Loren Ipsum Siat Teme Me Loren Ipsum Siat Teme Me",
-      estilo: "Cristã",
-      artista: "Cantora B",
-      video: "https://www.youtube.com/watch?v=yyyyyy",
-      imagem: "https://picsum.photos/400/300"
-    },
-    {
-      nome: "Born to Die",
-      momento: "entrada_noiva",
-      descricao: "Loren Ipsum Siat Teme Me Loren Ipsum Siat Teme Me Loren Teme Me Loren Ipsum Siat Teme Me Loren Ipsum Siat Teme Me",
-      estilo: "Pop",
-      artista: "Artista C",
-      video: "https://www.youtube.com/watch?v=zzzzzz",
-      imagem: "https://picsum.photos/400/300"
-    },
-    {
-      nome: "All with forever",
-      momento: "entrada_noiva",
-      descricao: "Loren Ipsum Siat Teme Me Loren Ipsum Siat Teme Me Loren Teme Me Loren Ipsum Siat Teme Me Loren Ipsum Siat Teme Me",
-      estilo: "Moderna",
-      artista: "Banda A",
-      video: "https://www.youtube.com/watch?v=xxxxxx",
-      imagem: "https://picsum.photos/400/300"
-    },
-    {
-      nome: "Running",
-      momento: "entrada_noiva",
-      descricao: "Loren Ipsum Siat Teme Me Loren Ipsum Siat Teme Me Loren Teme Me Loren Ipsum Siat Teme Me Loren Ipsum Siat Teme Me",
-      estilo: "Cristã",
-      artista: "Cantora B",
-      video: "https://www.youtube.com/watch?v=yyyyyy",
-      imagem: "https://picsum.photos/400/300"
-    },
-    {
-      nome: "Phorograth",
-      momento: "entrada_pais",
-      descricao: "Loren Ipsum Siat Teme Me Loren Ipsum Siat Teme Me Loren Teme Me Loren Ipsum Siat Teme Me Loren Ipsum Siat Teme Me",
-      estilo: "Pop",
-      artista: "Artista C",
-      video: "https://www.youtube.com/watch?v=zzzzzz",
-      imagem: "https://picsum.photos/400/300"
-    },
-    {
-      nome: "Algo parecido",
-      momento: "entrada_pais",
-      descricao: "Loren Ipsum Siat Teme Me Loren Ipsum Siat Teme Me Loren Teme Me Loren Ipsum Siat Teme Me Loren Ipsum Siat Teme Me",
-      estilo: "Indie",
-      artista: "Banda A",
-      video: "https://www.youtube.com/watch?v=xxxxxx",
-      imagem: "https://picsum.photos/400/300"
-    },
-    {
-      nome: "Céu azul",
-      momento: "entrada_pais",
-      descricao: "Loren Ipsum Siat Teme Me Loren Ipsum Siat Teme Me Loren Teme Me Loren Ipsum Siat Teme Me Loren Ipsum Siat Teme Me",
-      estilo: "Cristã",
-      artista: "Cantora B",
-      video: "https://www.youtube.com/watch?v=yyyyyy",
-      imagem: "https://picsum.photos/400/300"
-    },
-    {
-      nome: "Never gonna be Alone",
-      momento: "entrada_noivo",
-      descricao: "Loren Ipsum Siat Teme Me Loren Ipsum Siat Teme Me Loren Teme Me Loren Ipsum Siat Teme Me Loren Ipsum Siat Teme Me",
-      estilo: "Pop",
-      artista: "Artista C",
-      video: "https://www.youtube.com/watch?v=zzzzzz",
-      imagem: "https://picsum.photos/400/300"
-    },
-    {
-      nome: "Lost yourself",
-      momento: "entrada_aliancas",
-      descricao: "Loren Ipsum Siat Teme Me Loren Ipsum Siat Teme Me Loren Teme Me Loren Ipsum Siat Teme Me Loren Ipsum Siat Teme Me",
-      estilo: "Moderna",
-      artista: "Banda A",
-      video: "https://www.youtube.com/watch?v=xxxxxx",
-      imagem: "https://picsum.photos/400/300"
-    },
-    {
-      nome: "Love me and forever",
-      momento: "entrada_aliancas",
-      descricao: "Loren Ipsum Siat Teme Me Loren Ipsum Siat Teme Me Loren Teme Me Loren Ipsum Siat Teme Me Loren Ipsum Siat Teme Me",
-      estilo: "Cristã",
-      artista: "Cantora B",
-      video: "https://www.youtube.com/watch?v=yyyyyy",
-      imagem: "https://picsum.photos/400/300"
-    },
-    {
-      nome: "Me amo",
-      momento: "entrada_noiva",
-      descricao: "Loren Ipsum Siat Teme Me Loren Ipsum Siat Teme Me Loren Teme Me Loren Ipsum Siat Teme Me Loren Ipsum Siat Teme Me",
-      estilo: "Pop",
-      artista: "Artista C",
-      imagem: "https://picsum.photos/400/300"
-    }
-  ];
+document.addEventListener("DOMContentLoaded", async function () {
+  const entradaNoivoSheet = 'https://docs.google.com/spreadsheets/d/1Xr3zBjYQYFV9ACutlksbecSY3T5fWnkQAHGoob5juLo';
+  const sheet2JsonUrl = 'https://api.sheets2json.com/v1/doc/?url='
+
+  // TODO: get more estilos
+  const entradaNoivoUrl = sheet2JsonUrl + entradaNoivoSheet
+  const fetchedMusics = await fetch(entradaNoivoUrl).then(res => res.json())
+
+  // TODO: get imagem or generate random
+  const musicas = fetchedMusics
+    .slice(1)
+    .map(m => ({ nome: m?.[0], momento: 'entrada_noivo', descricao: m?.[1], estilo: m?.[2], artista: m?.[4], video: m?.[5] || '', imagem: '' }))
+    .filter((m) => m.nome && m.momento && m.descricao && m.estilo && m.artista)
 
   // Container principal
   const titleElement = document.getElementById("title");
@@ -127,12 +29,15 @@ document.addEventListener("DOMContentLoaded", function () {
   select.id = "filtro-estilo";
   select.className = "select-filtro";
 
-  const estilosUnicos = [...new Set(musicas.map(m => m.estilo))];
+  const estilosUnicos = [...new Set(musicas.map(m => m.estilo.toUpperCase()))];
   estilosUnicos.forEach(estilo => {
-    const opt = document.createElement("option");
-    opt.value = estilo;
-    opt.textContent = estilo;
-    select.appendChild(opt);
+    const estiloSplited = estilo.split('/')
+    estiloSplited.forEach(v => {
+      const opt = document.createElement("option");
+      opt.value = v.trim();
+      opt.textContent = v.trim();
+      select.appendChild(opt);
+    })
   });
 
   const botaoFiltrar = document.createElement("button");
@@ -163,7 +68,7 @@ document.addEventListener("DOMContentLoaded", function () {
   inputSearchText.addEventListener("input", (e) => {
     const value = e.target.value;
     const filtradas = musicas.filter(m => m.nome.toLowerCase().includes(value.toLowerCase())
-    || m.descricao.toLowerCase().includes(value.toLowerCase()));
+      || m.descricao.toLowerCase().includes(value.toLowerCase()));
     renderizarMusicas(containerPrincipal, filtradas, containerLista);
   });
 
@@ -172,7 +77,7 @@ document.addEventListener("DOMContentLoaded", function () {
   botaoFiltrar.addEventListener("click", () => {
     inputSearchText.value = ""
     const estiloSelecionado = select.value;
-    const filtradas = musicas.filter(m => m.estilo === estiloSelecionado);
+    const filtradas = musicas.filter(m => m.estilo.toLowerCase().includes(estiloSelecionado.toLowerCase()));
     renderizarMusicas(containerPrincipal, filtradas, containerLista);
   });
 
@@ -193,7 +98,7 @@ document.addEventListener("DOMContentLoaded", function () {
   container.appendChild(containerLista);
 
   // Momentos
-  // TODO: Colocar as imagens da Jady
+  // TODO: Manter selecionado junto ao filtro de estilo
   const momentDiv = document.createElement("div");
   momentDiv.className = "moment-musicas";
   container.appendChild(momentDiv);
@@ -212,7 +117,7 @@ document.addEventListener("DOMContentLoaded", function () {
 function renderizarMusicas(containerPrincipal, lista, containerLista, paginaAtual = 1, itensPorPagina = 6) {
   containerLista.innerHTML = "";
 
-  if(!lista) return
+  if (!lista) return
 
   const totalPaginas = Math.ceil(lista.length / itensPorPagina);
   const inicio = (paginaAtual - 1) * itensPorPagina;
@@ -222,15 +127,16 @@ function renderizarMusicas(containerPrincipal, lista, containerLista, paginaAtua
 
   paginaMusicas.forEach((musica) => {
     const item = document.createElement("div");
+    const defaultMusicUrl = 'https://institutomusicaldanilomenezes.com/wp-content/uploads/2025/05/entrada_aliancas-scaled.jpg'
     item.className = "musica-card";
 
+    // TODO: Colocar imagem genérica se não existir
     item.innerHTML = `
-      <img src="${musica.imagem}" alt="${musica.nome}">
+      <img src="${musica.imagem || defaultMusicUrl}" alt="${musica.nome}">
       <div class="info">
         <h3>${musica.nome}</h3>
-        <p>${musica.descricao.length > 75 ? ( musica.descricao.substring(0, 75) + '...' ) : musica.descricao}</p>
-        <p><strong>Estilo:</strong> ${musica.estilo}</p>
-        <p><strong>Artista:</strong> ${musica.artista}</p>
+        <p>${musica.descricao.length > 75 ? (musica.descricao.substring(0, 75) + '...') : musica.descricao}</p>
+        <p><strong>Tags:</strong> ${musica.artista}</p>
         <div class="botoes">
           <span class="estilo-tag">${musica.estilo}</span>
           ${musica?.video ? '<a href="' + musica.video + '" target="_blank">Assistir vídeo</a>' : ''}
