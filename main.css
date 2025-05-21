@@ -82,6 +82,12 @@
 }
 
 /* Momentos */
+.selected {
+  background-color: #ddd;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  transition: box-shadow 0.3s ease;
+}
+
 .moment-musicas {
   width: 25%;
   display: flex;
@@ -90,6 +96,7 @@
 }
 
 .moment-musicas div {
+  cursor: pointer;
   display: flex;
   justify-content: center;
   flex-direction: column;
@@ -194,6 +201,9 @@
   display: flex;
   justify-content: center;
   margin-top: 20px;
+  margin-left: 100px;
+  margin-right: 100px;
+  margin-bottom: 50px;
   gap: 10px;
 }
 

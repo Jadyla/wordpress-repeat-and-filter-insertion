@@ -28,6 +28,10 @@ document.addEventListener("DOMContentLoaded", async function () {
   const select = document.createElement("select");
   select.id = "filtro-estilo";
   select.className = "select-filtro";
+  const opt = document.createElement("option");
+  opt.value = "";
+  opt.textContent = "Selecionar";
+  select.appendChild(opt);
 
   const estilosUnicos = [...new Set(musicas.map(m => m.estilo.toUpperCase()))];
   estilosUnicos.forEach(estilo => {
@@ -66,6 +70,10 @@ document.addEventListener("DOMContentLoaded", async function () {
   containerPrincipal.appendChild(searchTextContainer);
 
   inputSearchText.addEventListener("input", (e) => {
+    if (select.selectedIndex)
+      select.remove(select.selectedIndex);
+    const otherElements = Array.from(momentDiv.children);
+    otherElements?.forEach(el => el.className = '')
     const value = e.target.value;
     const filtradas = musicas.filter(m => m.nome.toLowerCase().includes(value.toLowerCase())
       || m.descricao.toLowerCase().includes(value.toLowerCase()));
@@ -75,13 +83,18 @@ document.addEventListener("DOMContentLoaded", async function () {
   containerPrincipal.appendChild(filtroWrapper);
 
   botaoFiltrar.addEventListener("click", () => {
+    const otherElements = Array.from(momentDiv.children);
+    const selected = otherElements?.find(el => Array.from(el.classList).some(el => el === 'selected'))?.id || ''
+    console.log(selected)
     inputSearchText.value = ""
     const estiloSelecionado = select.value;
-    const filtradas = musicas.filter(m => m.estilo.toLowerCase().includes(estiloSelecionado.toLowerCase()));
+    const filtradas = musicas.filter(m => m.estilo.toLowerCase().includes(estiloSelecionado.toLowerCase()) && m.momento.includes(selected));
     renderizarMusicas(containerPrincipal, filtradas, containerLista);
   });
 
   botaoReset.addEventListener("click", () => {
+    const otherElements = Array.from(momentDiv.children);
+    otherElements?.forEach(el => el.className = '')
     inputSearchText.value = ""
     renderizarMusicas(containerPrincipal, musicas, containerLista);
   });
@@ -103,12 +116,12 @@ document.addEventListener("DOMContentLoaded", async function () {
   momentDiv.className = "moment-musicas";
   container.appendChild(momentDiv);
 
-  criaBotaoMomento(containerPrincipal, musicas, containerLista, momentDiv, "ENTRADA DO NOIVO", "entrada_noivo.png", "entrada_noivo")
-  criaBotaoMomento(containerPrincipal, musicas, containerLista, momentDiv, "ENTRADA DOS PAIS", "entrada_pais.png", "entrada_pais")
-  criaBotaoMomento(containerPrincipal, musicas, containerLista, momentDiv, "ENTRADA DA NOIVA", "entrada_noiva-scaled.jpg", "entrada_noiva")
-  criaBotaoMomento(containerPrincipal, musicas, containerLista, momentDiv, "ENTRADA DAS ALIANÇAS", "entrada_aliancas-scaled.jpg", "entrada_aliancas")
-  criaBotaoMomento(containerPrincipal, musicas, containerLista, momentDiv, "ENTRADA DOS PADRINHOS", "entrada_padrinhos-scaled.jpg", "entrada_padrinhos")
-  criaBotaoMomento(containerPrincipal, musicas, containerLista, momentDiv, "FLORISTAS", "floristas-scaled.jpg", "floristas")
+  criaBotaoMomento(momentDiv, "ENTRADA DO NOIVO", "entrada_noivo.png", "entrada_noivo")
+  criaBotaoMomento(momentDiv, "ENTRADA DOS PAIS", "entrada_pais.png", "entrada_pais")
+  criaBotaoMomento(momentDiv, "ENTRADA DA NOIVA", "entrada_noiva-scaled.jpg", "entrada_noiva")
+  criaBotaoMomento(momentDiv, "ENTRADA DAS ALIANÇAS", "entrada_aliancas-scaled.jpg", "entrada_aliancas")
+  criaBotaoMomento(momentDiv, "ENTRADA DOS PADRINHOS", "entrada_padrinhos-scaled.jpg", "entrada_padrinhos")
+  criaBotaoMomento(momentDiv, "FLORISTAS", "floristas-scaled.jpg", "floristas")
   // TODO: Adicionar mais entradas
 
   renderizarMusicas(containerPrincipal, musicas, containerLista);
@@ -168,7 +181,7 @@ function renderizarMusicas(containerPrincipal, lista, containerLista, paginaAtua
   containerPrincipal.insertAdjacentElement("afterend", paginacao);
 }
 
-function criaBotaoMomento(containerPrincipal, musicas, containerLista, momentDiv, txt, img, id) {
+function criaBotaoMomento(momentDiv, txt, img, id) {
   const el = document.createElement("div");
   const elImg = document.createElement("img");
   const elSpan = document.createElement("spam");
@@ -179,7 +192,15 @@ function criaBotaoMomento(containerPrincipal, musicas, containerLista, momentDiv
   el.appendChild(elSpan)
   momentDiv.appendChild(el);
   el.addEventListener("click", () => {
-    const filtradas = musicas.filter(m => m.momento === id);
-    renderizarMusicas(containerPrincipal, filtradas, containerLista);
+    const otherElements = Array.from(momentDiv.children);
+    otherElements?.forEach(el => {
+      if (el.id !== id) el.className = ''
+    })
+    // TODO: Mudar cor
+    if (Array.from(el.classList).some(el => el === 'selected')) {
+      el.className = ''
+    } else {
+      el.className = 'selected'
+    }
   });
 }
