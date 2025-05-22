@@ -1,15 +1,27 @@
 document.addEventListener("DOMContentLoaded", async function () {
-  const entradaNoivoSheet = 'https://docs.google.com/spreadsheets/d/1Xr3zBjYQYFV9ACutlksbecSY3T5fWnkQAHGoob5juLo';
+  const sheet = 'https://docs.google.com/spreadsheets/d/1Xr3zBjYQYFV9ACutlksbecSY3T5fWnkQAHGoob5juLo/edit'
   const sheet2JsonUrl = 'https://api.sheets2json.com/v1/doc/?url='
+  let musicasArray = []
 
-  // TODO: get more estilos
-  const entradaNoivoUrl = sheet2JsonUrl + entradaNoivoSheet
-  const fetchedMusics = await fetch(entradaNoivoUrl).then(res => res.json())
+  // TODO: get all tabs
+  const tabs = [
+    ['Entrada do noivo', 'entrada_noivo'],
+    ['Entrada dos pais', 'entrada_pais'],
+    ['Entrada da noiva', 'entrada_noiva'],
+    ['Entrada das alianças', 'entrada_aliancas'],
+    ['Entrada dos padrinhos', 'entrada_padrinhos'],
+    ['Entrada de plaquinha ou florist', 'floristas']
+  ]
+  for (let i = 0; i < tabs.length; i++) {
+    const tab = tabs[i][0];
+    const key = tabs[i][1]
+    const musicas = await fetch(sheet2JsonUrl + `${sheet}&sheet=${tab}`).then(res => res.json())
+    musicasArray = [...musicasArray, ...musicas.slice(1).map(m => [...m, key])]
+  }
 
   // TODO: get imagem or generate random
-  const musicas = fetchedMusics
-    .slice(1)
-    .map(m => ({ nome: m?.[0], momento: 'entrada_noivo', descricao: m?.[1], estilo: m?.[2], artista: m?.[4], video: m?.[5] || '', imagem: '' }))
+  const musicas = musicasArray
+    .map(m => ({ nome: m?.[0], momento: m?.[8], descricao: m?.[1], estilo: m?.[2], artista: m?.[4], video: m?.[5] || '', imagem: '' }))
     .filter((m) => m.nome && m.momento && m.descricao && m.estilo && m.artista)
 
   // Container principal
@@ -111,7 +123,6 @@ document.addEventListener("DOMContentLoaded", async function () {
   container.appendChild(containerLista);
 
   // Momentos
-  // TODO: Manter selecionado junto ao filtro de estilo
   const momentDiv = document.createElement("div");
   momentDiv.className = "moment-musicas";
   container.appendChild(momentDiv);
@@ -122,7 +133,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   criaBotaoMomento(momentDiv, "ENTRADA DAS ALIANÇAS", "entrada_aliancas-scaled.jpg", "entrada_aliancas")
   criaBotaoMomento(momentDiv, "ENTRADA DOS PADRINHOS", "entrada_padrinhos-scaled.jpg", "entrada_padrinhos")
   criaBotaoMomento(momentDiv, "FLORISTAS", "floristas-scaled.jpg", "floristas")
-  // TODO: Adicionar mais entradas
+  // TODO: Adicionar mais momentos
 
   renderizarMusicas(containerPrincipal, musicas, containerLista);
 });
@@ -143,7 +154,6 @@ function renderizarMusicas(containerPrincipal, lista, containerLista, paginaAtua
     const defaultMusicUrl = 'https://institutomusicaldanilomenezes.com/wp-content/uploads/2025/05/entrada_aliancas-scaled.jpg'
     item.className = "musica-card";
 
-    // TODO: Colocar imagem genérica se não existir
     item.innerHTML = `
       <img src="${musica.imagem || defaultMusicUrl}" alt="${musica.nome}">
       <div class="info">
@@ -196,7 +206,6 @@ function criaBotaoMomento(momentDiv, txt, img, id) {
     otherElements?.forEach(el => {
       if (el.id !== id) el.className = ''
     })
-    // TODO: Mudar cor
     if (Array.from(el.classList).some(el => el === 'selected')) {
       el.className = ''
     } else {
