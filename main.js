@@ -133,12 +133,22 @@ document.addEventListener("DOMContentLoaded", async function () {
   criaBotaoMomento(momentDiv, "ENTRADA DAS ALIANÇAS", "entrada_aliancas-scaled.jpg", "entrada_aliancas")
   criaBotaoMomento(momentDiv, "ENTRADA DOS PADRINHOS", "entrada_padrinhos-scaled.jpg", "entrada_padrinhos")
   criaBotaoMomento(momentDiv, "FLORISTAS", "floristas-scaled.jpg", "floristas")
+  criaBotaoMomento(momentDiv, "COMUNHÃO", "comunhao-scaled.jpg", "comunhao")
+  criaBotaoMomento(momentDiv, "BEIJO", "beijo.jpg", "beijo")
+  criaBotaoMomento(momentDiv, "ASSINATURA", "assinatura-scaled.jpg", "assinatura")
+  criaBotaoMomento(momentDiv, "SAÍDA", "saida-scaled.jpg", "saida")
+  criaBotaoMomento(momentDiv, "CUMPRIMENTOS", "cumprimentos.jpg", "cumprimentos")
+  criaBotaoMomento(momentDiv, "ENTRADA DA BÍBLIA", "entrada_biblia.jpg", "entrada_biblia")
+  criaBotaoMomento(momentDiv, "SALMO", "salmo.jpg", "salmo")
+  criaBotaoMomento(momentDiv, "SANTA CEIA", "santa_ceia-scaled.jpg", "santa_ceia")
+
+
   // TODO: Adicionar mais momentos
 
   renderizarMusicas(containerPrincipal, musicas, containerLista);
 });
 
-function renderizarMusicas(containerPrincipal, lista, containerLista, paginaAtual = 1, itensPorPagina = 6) {
+function renderizarMusicas(containerPrincipal, lista, containerLista, paginaAtual = 1, itensPorPagina = 12) {
   containerLista.innerHTML = "";
 
   if (!lista) return
