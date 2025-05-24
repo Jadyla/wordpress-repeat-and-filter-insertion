@@ -82,14 +82,13 @@ document.addEventListener("DOMContentLoaded", async function () {
   containerPrincipal.appendChild(searchTextContainer);
 
   inputSearchText.addEventListener("input", (e) => {
-    if (select.selectedIndex)
-      select.remove(select.selectedIndex);
+    if (select.selectedIndex) select.remove(select.selectedIndex);
     const otherElements = Array.from(momentDiv.children);
     otherElements?.forEach(el => el.className = '')
     const value = e.target.value;
     const filtradas = musicas.filter(m => m.nome.toLowerCase().includes(value.toLowerCase())
       || m.descricao.toLowerCase().includes(value.toLowerCase()));
-    renderizarMusicas(containerPrincipal, filtradas, containerLista);
+    renderizarMusicas(containerPrincipal, filtradas, listaMusicas);
   });
 
   containerPrincipal.appendChild(filtroWrapper);
@@ -101,14 +100,14 @@ document.addEventListener("DOMContentLoaded", async function () {
     inputSearchText.value = ""
     const estiloSelecionado = select.value;
     const filtradas = musicas.filter(m => m.estilo.toLowerCase().includes(estiloSelecionado.toLowerCase()) && m.momento.includes(selected));
-    renderizarMusicas(containerPrincipal, filtradas, containerLista);
+    renderizarMusicas(containerPrincipal, filtradas, listaMusicas);
   });
 
   botaoReset.addEventListener("click", () => {
     const otherElements = Array.from(momentDiv.children);
     otherElements?.forEach(el => el.className = '')
     inputSearchText.value = ""
-    renderizarMusicas(containerPrincipal, musicas, containerLista);
+    renderizarMusicas(containerPrincipal, musicas, listaMusicas);
   });
 
   // Container de Lista de Musicas e Momentos
@@ -117,10 +116,13 @@ document.addEventListener("DOMContentLoaded", async function () {
   containerPrincipal.appendChild(container);
 
   // Lista de Musicas
-  const containerLista = document.createElement("div");
-  containerLista.id = "lista-musicas";
-  containerLista.className = "lista-musicas";
-  container.appendChild(containerLista);
+  const listaMusicas = document.createElement("div");
+  listaMusicas.id = "lista-musicas";
+  listaMusicas.className = "lista-musicas";
+  const listaMusicasContainer = document.createElement("div")
+  listaMusicasContainer.className = "lista-musicas-container";
+  listaMusicasContainer.appendChild(listaMusicas);
+  container.appendChild(listaMusicasContainer);
 
   // Momentos
   const momentDiv = document.createElement("div");
@@ -145,11 +147,11 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   // TODO: Adicionar mais momentos
 
-  renderizarMusicas(containerPrincipal, musicas, containerLista);
+  renderizarMusicas(containerPrincipal, musicas, listaMusicas);
 });
 
-function renderizarMusicas(containerPrincipal, lista, containerLista, paginaAtual = 1, itensPorPagina = 12) {
-  containerLista.innerHTML = "";
+function renderizarMusicas(containerPrincipal, lista, listaMusicas, paginaAtual = 1, itensPorPagina = 12) {
+  listaMusicas.innerHTML = "";
 
   if (!lista) return
 
@@ -176,7 +178,7 @@ function renderizarMusicas(containerPrincipal, lista, containerLista, paginaAtua
         </div>
       </div>
     `;
-    containerLista.appendChild(item);
+    listaMusicas.appendChild(item);
   });
 
   // Paginação
@@ -193,7 +195,7 @@ function renderizarMusicas(containerPrincipal, lista, containerLista, paginaAtua
       botao.classList.add("ativo");
     }
     botao.addEventListener("click", () => {
-      renderizarMusicas(containerPrincipal, lista, containerLista, i, itensPorPagina);
+      renderizarMusicas(containerPrincipal, lista, listaMusicas, i, itensPorPagina);
     });
     paginacao.appendChild(botao);
   }

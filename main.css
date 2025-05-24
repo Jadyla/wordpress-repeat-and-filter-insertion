@@ -77,7 +77,8 @@
 
 @media (max-width: 600px) {
   .container-musicas {
-    display: block;
+    display: flex;
+    flex-direction: column-reverse;
   }
 }
 
@@ -127,6 +128,8 @@
 @media (max-width: 600px) {
   .moment-musicas {
     width: 100%;
+    padding-top: 10px;
+    padding-bottom: 10px;
     display: flex;
     gap: 24px;
     flex-direction: row;
@@ -137,15 +140,21 @@
 
 /* Lista de Musica */
 .lista-musicas {
-  width: 70%;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 20px;
 }
 
+.lista-musicas-container{
+  width: 70%;
+}
+
 @media (max-width: 600px) {
-  .lista-musicas {
+  .lista-musicas-container {
     width: 100%;
+  }
+  .lista-musicas {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   }
 }
 
@@ -226,4 +235,11 @@
   background-color: #333;
   color: white;
   border-color: #333;
+}
+
+@media (max-width: 600px) {
+  .paginacao {
+    margin-left: 20px;
+    margin-right: 20px;
+  }
 }
