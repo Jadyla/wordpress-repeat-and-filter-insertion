@@ -1,4 +1,28 @@
 document.addEventListener("DOMContentLoaded", async function () {
+  // Container principal
+  const titleElement = document.getElementById("title");
+  if (!titleElement) return;
+
+  const containerPrincipal = document.createElement("div");
+  containerPrincipal.id = "playlist-container";
+
+  titleElement.insertAdjacentElement("afterend", containerPrincipal);
+
+  const loading = document.createElement("div");
+  loading.className = "loading-visible";
+
+  const spinner = document.createElement("div");
+  spinner.className = "spinner";
+
+  const loadingText = document.createElement("h3");
+  loadingText.textContent = "Carregando Músicas...";
+
+  loading.appendChild(spinner);
+  loading.appendChild(loadingText);
+
+  containerPrincipal.appendChild(loading);
+
+
   const sheet = 'https://docs.google.com/spreadsheets/d/1Xr3zBjYQYFV9ACutlksbecSY3T5fWnkQAHGoob5juLo/edit'
   const sheet2JsonUrl = 'https://api.sheets2json.com/v1/doc/?url='
   let musicasArray = []
@@ -10,7 +34,15 @@ document.addEventListener("DOMContentLoaded", async function () {
     ['Entrada da noiva', 'entrada_noiva'],
     ['Entrada das alianças', 'entrada_aliancas'],
     ['Entrada dos padrinhos', 'entrada_padrinhos'],
-    ['Entrada de plaquinha ou florist', 'floristas']
+    ['Entrada de plaquinha ou florist', 'floristas'],
+    ['comunhão', 'comunhao'],
+    ['Beijo', 'beijo'],
+    ['Assinaturas', 'assinatura'],
+    ['Saida', 'saida'],
+    ['Cumprimentos', 'cumprimentos'],
+    ['Entrada da Biblia', 'entrada_biblia'],
+    ['Salmo', 'salmo'],
+    ['Santa Ceia', 'santa_ceia']
   ]
   for (let i = 0; i < tabs.length; i++) {
     const tab = tabs[i][0];
@@ -24,14 +56,8 @@ document.addEventListener("DOMContentLoaded", async function () {
     .map(m => ({ nome: m?.[0], momento: m?.[8], descricao: m?.[1], estilo: m?.[2], artista: m?.[4], video: m?.[5] || '', imagem: '' }))
     .filter((m) => m.nome && m.momento && m.descricao && m.estilo && m.artista)
 
-  // Container principal
-  const titleElement = document.getElementById("title");
-  if (!titleElement) return;
 
-  const containerPrincipal = document.createElement("div");
-  containerPrincipal.id = "playlist-container";
-
-  titleElement.insertAdjacentElement("afterend", containerPrincipal);
+  loading.className = "loading-invisible";
 
   // Filtros
   const filtroWrapper = document.createElement("div");
@@ -42,7 +68,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   select.className = "select-filtro";
   const opt = document.createElement("option");
   opt.value = "";
-  opt.textContent = "Selecionar";
+  opt.textContent = "Selecionar estilo";
   select.appendChild(opt);
 
   const estilosUnicos = [...new Set(musicas.map(m => m.estilo.toUpperCase()))];
@@ -61,12 +87,8 @@ document.addEventListener("DOMContentLoaded", async function () {
   botaoFiltrar.className = "botao-filtrar";
 
   const botaoReset = document.createElement("button");
-  botaoReset.textContent = "Todos";
+  botaoReset.textContent = "Mostrar Tudo";
   botaoReset.className = "botao-reset";
-
-  filtroWrapper.appendChild(select);
-  filtroWrapper.appendChild(botaoFiltrar);
-  filtroWrapper.appendChild(botaoReset);
 
   const searchTextContainer = document.createElement("div");
   searchTextContainer.className = "search-text-wrapper";
@@ -77,9 +99,25 @@ document.addEventListener("DOMContentLoaded", async function () {
   inputSearchText.placeholder = "Pesquisar..."
   inputSearchText.className = "input-search-text";
 
-  searchTextContainer.appendChild(inputSearchText);
+  filtroWrapper.appendChild(inputSearchText);
+  filtroWrapper.appendChild(select);
+  filtroWrapper.appendChild(botaoFiltrar);
+  filtroWrapper.appendChild(botaoReset);
 
   containerPrincipal.appendChild(searchTextContainer);
+
+  select.addEventListener("change", (e) => {
+    if (e.target.value) {
+      select.style.color = '#F5BD50'
+      select.style.fontWeight = 700;
+      select.style.borderColor = '#F5BD50';
+      botaoFiltrar.click()
+    } else {
+      select.style.color = '#475569'
+      select.style.fontWeight = 400;
+      select.style.borderColor = '#475569';
+    }
+  })
 
   inputSearchText.addEventListener("input", (e) => {
     if (select.selectedIndex) select.remove(select.selectedIndex);
@@ -88,6 +126,13 @@ document.addEventListener("DOMContentLoaded", async function () {
     const value = e.target.value;
     const filtradas = musicas.filter(m => m.nome.toLowerCase().includes(value.toLowerCase())
       || m.descricao.toLowerCase().includes(value.toLowerCase()));
+
+    select.style.display = value ? 'none' : 'block'
+    botaoReset.style.display = value ? 'none' : 'inline'
+    momentDiv.className = value ? 'moment-musicas moment-musicas-disabled' : 'moment-musicas'
+    select.style.color = '#475569'
+    select.style.fontWeight = 400;
+    select.style.borderColor = '#475569';
     renderizarMusicas(containerPrincipal, filtradas, listaMusicas);
   });
 
@@ -96,7 +141,6 @@ document.addEventListener("DOMContentLoaded", async function () {
   botaoFiltrar.addEventListener("click", () => {
     const otherElements = Array.from(momentDiv.children);
     const selected = otherElements?.find(el => Array.from(el.classList).some(el => el === 'selected'))?.id || ''
-    console.log(selected)
     inputSearchText.value = ""
     const estiloSelecionado = select.value;
     const filtradas = musicas.filter(m => m.estilo.toLowerCase().includes(estiloSelecionado.toLowerCase()) && m.momento.includes(selected));
@@ -104,9 +148,13 @@ document.addEventListener("DOMContentLoaded", async function () {
   });
 
   botaoReset.addEventListener("click", () => {
+    if (select.selectedIndex) select.remove(select.selectedIndex);
     const otherElements = Array.from(momentDiv.children);
     otherElements?.forEach(el => el.className = '')
     inputSearchText.value = ""
+    select.style.color = '#475569'
+    select.style.fontWeight = 400;
+    select.style.borderColor = '#475569';
     renderizarMusicas(containerPrincipal, musicas, listaMusicas);
   });
 
@@ -129,20 +177,20 @@ document.addEventListener("DOMContentLoaded", async function () {
   momentDiv.className = "moment-musicas";
   container.appendChild(momentDiv);
 
-  criaBotaoMomento(momentDiv, "ENTRADA DO NOIVO", "entrada_noivo.png", "entrada_noivo")
-  criaBotaoMomento(momentDiv, "ENTRADA DOS PAIS", "entrada_pais.png", "entrada_pais")
-  criaBotaoMomento(momentDiv, "ENTRADA DA NOIVA", "entrada_noiva-scaled.jpg", "entrada_noiva")
-  criaBotaoMomento(momentDiv, "ENTRADA DAS ALIANÇAS", "entrada_aliancas-scaled.jpg", "entrada_aliancas")
-  criaBotaoMomento(momentDiv, "ENTRADA DOS PADRINHOS", "entrada_padrinhos-scaled.jpg", "entrada_padrinhos")
-  criaBotaoMomento(momentDiv, "FLORISTAS", "floristas-scaled.jpg", "floristas")
-  criaBotaoMomento(momentDiv, "COMUNHÃO", "comunhao-scaled.jpg", "comunhao")
-  criaBotaoMomento(momentDiv, "BEIJO", "beijo.jpg", "beijo")
-  criaBotaoMomento(momentDiv, "ASSINATURA", "assinatura-scaled.jpg", "assinatura")
-  criaBotaoMomento(momentDiv, "SAÍDA", "saida-scaled.jpg", "saida")
-  criaBotaoMomento(momentDiv, "CUMPRIMENTOS", "cumprimentos.jpg", "cumprimentos")
-  criaBotaoMomento(momentDiv, "ENTRADA DA BÍBLIA", "entrada_biblia.jpg", "entrada_biblia")
-  criaBotaoMomento(momentDiv, "SALMO", "salmo.jpg", "salmo")
-  criaBotaoMomento(momentDiv, "SANTA CEIA", "santa_ceia-scaled.jpg", "santa_ceia")
+  criaBotaoMomento(botaoFiltrar, momentDiv, "ENTRADA DO NOIVO", "entrada_noivo.png", "entrada_noivo")
+  criaBotaoMomento(botaoFiltrar, momentDiv, "ENTRADA DOS PAIS", "entrada_pais.png", "entrada_pais")
+  criaBotaoMomento(botaoFiltrar, momentDiv, "ENTRADA DA NOIVA", "entrada_noiva-scaled.jpg", "entrada_noiva")
+  criaBotaoMomento(botaoFiltrar, momentDiv, "ENTRADA DAS ALIANÇAS", "entrada_aliancas-scaled.jpg", "entrada_aliancas")
+  criaBotaoMomento(botaoFiltrar, momentDiv, "ENTRADA DOS PADRINHOS", "entrada_padrinhos-scaled.jpg", "entrada_padrinhos")
+  criaBotaoMomento(botaoFiltrar, momentDiv, "FLORISTAS", "floristas-scaled.jpg", "floristas")
+  criaBotaoMomento(botaoFiltrar, momentDiv, "COMUNHÃO", "comunhao-scaled.jpg", "comunhao")
+  criaBotaoMomento(botaoFiltrar, momentDiv, "BEIJO", "beijo.jpg", "beijo")
+  criaBotaoMomento(botaoFiltrar, momentDiv, "ASSINATURA", "assinatura-scaled.jpg", "assinatura")
+  criaBotaoMomento(botaoFiltrar, momentDiv, "SAÍDA", "saida-scaled.jpg", "saida")
+  criaBotaoMomento(botaoFiltrar, momentDiv, "CUMPRIMENTOS", "cumprimentos.jpg", "cumprimentos")
+  criaBotaoMomento(botaoFiltrar, momentDiv, "ENTRADA DA BÍBLIA", "entrada_biblia.jpg", "entrada_biblia")
+  criaBotaoMomento(botaoFiltrar, momentDiv, "SALMO", "salmo.jpg", "salmo")
+  criaBotaoMomento(botaoFiltrar, momentDiv, "SANTA CEIA", "santa_ceia-scaled.jpg", "santa_ceia")
 
 
   // TODO: Adicionar mais momentos
@@ -203,7 +251,7 @@ function renderizarMusicas(containerPrincipal, lista, listaMusicas, paginaAtual 
   containerPrincipal.insertAdjacentElement("afterend", paginacao);
 }
 
-function criaBotaoMomento(momentDiv, txt, img, id) {
+function criaBotaoMomento(botaoFiltrar, momentDiv, txt, img, id) {
   const el = document.createElement("div");
   const elImg = document.createElement("img");
   const elSpan = document.createElement("spam");
@@ -223,5 +271,6 @@ function criaBotaoMomento(momentDiv, txt, img, id) {
     } else {
       el.className = 'selected'
     }
+    botaoFiltrar.click();
   });
 }
