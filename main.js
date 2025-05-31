@@ -27,7 +27,6 @@ document.addEventListener("DOMContentLoaded", async function () {
   const sheet2JsonUrl = 'https://api.sheets2json.com/v1/doc/?url='
   let musicasArray = []
 
-  // TODO: get all tabs
   const tabs = [
     ['Entrada do noivo', 'entrada_noivo'],
     ['Entrada dos pais', 'entrada_pais'],
@@ -42,7 +41,12 @@ document.addEventListener("DOMContentLoaded", async function () {
     ['Cumprimentos', 'cumprimentos'],
     ['Entrada da Biblia', 'entrada_biblia'],
     ['Salmo', 'salmo'],
-    ['Santa Ceia', 'santa_ceia']
+    ['Santa Ceia', 'santa_ceia'],
+    ['Entrada da sagrada familia', 'entrada_sagrada_familia'],
+    ['Homenagem ao falecido', 'homenagem_falecido'],
+    ['Entrada de nossa senhora', 'entrada_nossa_senhora'],
+    ['Aclamação ao Evangelho', 'aclamacao_evangelho'],
+    ['Oração', 'oracao']
   ]
   for (let i = 0; i < tabs.length; i++) {
     const tab = tabs[i][0];
@@ -191,9 +195,11 @@ document.addEventListener("DOMContentLoaded", async function () {
   criaBotaoMomento(botaoFiltrar, momentDiv, "ENTRADA DA BÍBLIA", "entrada_biblia.jpg", "entrada_biblia")
   criaBotaoMomento(botaoFiltrar, momentDiv, "SALMO", "salmo.jpg", "salmo")
   criaBotaoMomento(botaoFiltrar, momentDiv, "SANTA CEIA", "santa_ceia-scaled.jpg", "santa_ceia")
-
-
-  // TODO: Adicionar mais momentos
+  criaBotaoMomento(botaoFiltrar, momentDiv, "ENTRADA DA SAGRADA FAMÍLIA", "entrada_sagrada_familia.jpg", "entrada_sagrada_familia")
+  criaBotaoMomento(botaoFiltrar, momentDiv, "HOMENAGEM AO FALECIDO", "homenagem_falecido.jpg", "homenagem_falecido")
+  criaBotaoMomento(botaoFiltrar, momentDiv, "ENTRADA DA NOSSA SENHORA", "entrada_nossa_senhora.jpg", "entrada_nossa_senhora")
+  criaBotaoMomento(botaoFiltrar, momentDiv, "ACLAMAÇÃO AO EVANGELHO", "aclamacao_evangelio.jpg", "aclamacao_evangelho")
+  criaBotaoMomento(botaoFiltrar, momentDiv, "ORAÇÃO", "oracao.jpg", "oracao")
 
   renderizarMusicas(containerPrincipal, musicas, listaMusicas);
 });
@@ -229,23 +235,51 @@ function renderizarMusicas(containerPrincipal, lista, listaMusicas, paginaAtual 
     listaMusicas.appendChild(item);
   });
 
-  // Paginação
   const paginacao = document.getElementById("paginacao") || document.createElement("div");
   paginacao.innerHTML = "";
   paginacao.className = "paginacao";
   paginacao.id = "paginacao";
 
-  for (let i = 1; i <= totalPaginas; i++) {
+  function adicionarBotao(pagina, texto = null, ativo = false) {
     const botao = document.createElement("button");
-    botao.textContent = i;
+    botao.textContent = texto || pagina;
     botao.className = "botao-pagina";
-    if (i === paginaAtual) {
-      botao.classList.add("ativo");
-    }
+    if (ativo) botao.classList.add("ativo");
     botao.addEventListener("click", () => {
-      renderizarMusicas(containerPrincipal, lista, listaMusicas, i, itensPorPagina);
+      renderizarMusicas(containerPrincipal, lista, listaMusicas, pagina, itensPorPagina);
     });
     paginacao.appendChild(botao);
+  }
+
+  // Sempre mostra a primeira página
+  adicionarBotao(1, null, paginaAtual === 1);
+
+  // Mostrar "..." após a página 1 se necessário
+  if (paginaAtual > 4) {
+    const pontos = document.createElement("span");
+    pontos.textContent = "...";
+    pontos.className = "pontos";
+    paginacao.appendChild(pontos);
+  }
+
+  // Páginas ao redor da atual
+  for (let i = paginaAtual - 1; i <= paginaAtual + 1; i++) {
+    if (i > 1 && i < totalPaginas) {
+      adicionarBotao(i, null, i === paginaAtual);
+    }
+  }
+
+  // Mostrar "..." antes da última página se necessário
+  if (paginaAtual < totalPaginas - 3) {
+    const pontos = document.createElement("span");
+    pontos.textContent = "...";
+    pontos.className = "pontos";
+    paginacao.appendChild(pontos);
+  }
+
+  // Sempre mostra a última página (evita repetir se for a atual)
+  if (totalPaginas > 1) {
+    adicionarBotao(totalPaginas, null, paginaAtual === totalPaginas);
   }
 
   containerPrincipal.insertAdjacentElement("afterend", paginacao);
