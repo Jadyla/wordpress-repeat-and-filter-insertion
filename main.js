@@ -1,4 +1,8 @@
 document.addEventListener("DOMContentLoaded", async function () {
+  // consts
+  const limitLoading1 = 5;
+  const limitLoading2 = 10;
+
   // Container principal
   const titleElement = document.getElementById("title");
   if (!titleElement) return;
@@ -8,6 +12,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   titleElement.insertAdjacentElement("afterend", containerPrincipal);
 
+  // Loading
   const loading = document.createElement("div");
   loading.className = "loading-visible";
 
@@ -22,7 +27,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   containerPrincipal.appendChild(loading);
 
-
+  // Musicas
   const sheet = 'https://docs.google.com/spreadsheets/d/1Xr3zBjYQYFV9ACutlksbecSY3T5fWnkQAHGoob5juLo/edit'
   const sheet2JsonUrl = 'https://api.sheets2json.com/v1/doc/?url='
   let musicasArray = []
@@ -48,18 +53,19 @@ document.addEventListener("DOMContentLoaded", async function () {
     ['Aclamação ao Evangelho', 'aclamacao_evangelho'],
     ['Oração', 'oracao']
   ]
-  for (let i = 0; i < tabs.length; i++) {
-    const tab = tabs[i][0];
-    const key = tabs[i][1]
+
+  const primeirosTabs = tabs.slice(0, limitLoading1);
+  const segundosTabs = tabs.slice(limitLoading1, limitLoading2);
+  const terceirosTabs = tabs.slice(limitLoading2);
+
+  for (let i = 0; i < primeirosTabs.length; i++) {
+    const tab = primeirosTabs[i][0];
+    const key = primeirosTabs[i][1]
     const musicas = await fetch(sheet2JsonUrl + `${sheet}&sheet=${tab}`).then(res => res.json())
     musicasArray = [...musicasArray, ...musicas.slice(1).map(m => [...m, key])]
   }
 
-  // TODO: get imagem or generate random
-  const musicas = musicasArray
-    .map(m => ({ nome: m?.[0], momento: m?.[8], descricao: m?.[1], estilo: m?.[2], artista: m?.[4], video: m?.[5] || '', imagem: '' }))
-    .filter((m) => m.nome && m.momento && m.descricao && m.estilo && m.artista)
-
+  let musicas = getMusicasfromArray(musicasArray)
 
   loading.className = "loading-invisible";
 
@@ -202,9 +208,21 @@ document.addEventListener("DOMContentLoaded", async function () {
   criaBotaoMomento(botaoFiltrar, momentDiv, "ORAÇÃO", "oracao.jpg", "oracao")
 
   renderizarMusicas(containerPrincipal, musicas, listaMusicas);
+
+  // Get another musics
+  const buttons = momentDiv.children
+  Array.from(buttons).slice(limitLoading1).map(el => { el.className = 'loading' })
+
+  musicasArray = await getMusicasArray(segundosTabs, sheet2JsonUrl, sheet)
+  musicas = [...musicas, ...getMusicasfromArray(musicasArray)]
+  Array.from(buttons).slice(0, limitLoading2).map(el => { el.className = '' })
+
+  musicasArray = await getMusicasArray(terceirosTabs, sheet2JsonUrl, sheet)
+  musicas = [...musicas, ...getMusicasfromArray(musicasArray)]
+  Array.from(buttons).slice(limitLoading2).map(el => { el.className = '' })
 });
 
-function renderizarMusicas(containerPrincipal, lista, listaMusicas, paginaAtual = 1, itensPorPagina = 12) {
+function renderizarMusicas(containerPrincipal, lista, listaMusicas, paginaAtual = 1, itensPorPagina = 14) {
   listaMusicas.innerHTML = "";
 
   if (!lista) return
@@ -298,7 +316,7 @@ function criaBotaoMomento(botaoFiltrar, momentDiv, txt, img, id) {
   el.addEventListener("click", () => {
     const otherElements = Array.from(momentDiv.children);
     otherElements?.forEach(el => {
-      if (el.id !== id) el.className = ''
+      if (el.id !== id && !el.className.includes('loading')) el.className = ''
     })
     if (Array.from(el.classList).some(el => el === 'selected')) {
       el.className = ''
@@ -307,4 +325,22 @@ function criaBotaoMomento(botaoFiltrar, momentDiv, txt, img, id) {
     }
     botaoFiltrar.click();
   });
+}
+
+function getMusicasfromArray(musicasArray) {
+  // TODO: get imagem or generate random
+  return musicasArray
+    .map(m => ({ nome: m?.[0], momento: m?.[8], descricao: m?.[1], estilo: m?.[2], artista: m?.[4], video: m?.[5] || '', imagem: '' }))
+    .filter((m) => m.nome && m.momento && m.descricao && m.estilo && m.artista)
+}
+
+async function getMusicasArray(tabs, sheet2JsonUrl, sheet) {
+  let musicasArray = []
+  for (let i = 0; i < tabs.length; i++) {
+    const tab = tabs[i][0];
+    const key = tabs[i][1]
+    const musicas = await fetch(sheet2JsonUrl + `${sheet}&sheet=${tab}`).then(res => res.json())
+    musicasArray = [...musicasArray, ...musicas.slice(1).map(m => [...m, key])]
+  }
+  return musicasArray
 }
