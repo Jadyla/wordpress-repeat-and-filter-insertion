@@ -216,10 +216,13 @@ document.addEventListener("DOMContentLoaded", async function () {
   musicasArray = await getMusicasArray(segundosTabs, sheet2JsonUrl, sheet)
   musicas = [...musicas, ...getMusicasfromArray(musicasArray)]
   Array.from(buttons).slice(0, limitLoading2).map(el => { el.className = '' })
+  renderizarMusicas(containerPrincipal, musicas, listaMusicas);
 
   musicasArray = await getMusicasArray(terceirosTabs, sheet2JsonUrl, sheet)
   musicas = [...musicas, ...getMusicasfromArray(musicasArray)]
   Array.from(buttons).slice(limitLoading2).map(el => { el.className = '' })
+  renderizarMusicas(containerPrincipal, musicas, listaMusicas);
+
 });
 
 function renderizarMusicas(containerPrincipal, lista, listaMusicas, paginaAtual = 1, itensPorPagina = 14) {
@@ -235,18 +238,41 @@ function renderizarMusicas(containerPrincipal, lista, listaMusicas, paginaAtual 
 
   paginaMusicas.forEach((musica) => {
     const item = document.createElement("div");
-    const defaultMusicUrl = 'https://institutomusicaldanilomenezes.com/wp-content/uploads/2025/05/entrada_aliancas-scaled.jpg'
+    const uploadsUrl = "https://institutomusicaldanilomenezes.com/wp-content/uploads"
+    const imagens = [
+      uploadsUrl + "/2025/05/entrada_aliancas-scaled.jpg",
+      uploadsUrl + "/2025/05/DSC0001-1-scaled.jpg",
+      uploadsUrl + "/2025/05/IMG_0555-1-scaled.jpg",
+      uploadsUrl + "/2025/05/WhatsApp-Image-2025-04-24-at-15.13.39-1.jpeg",
+      uploadsUrl + "/2025/05/WhatsApp-Image-2025-04-24-at-15.13.42-1.jpeg",
+      uploadsUrl + "/2025/05/WhatsApp-Image-2025-04-24-at-15.13.44-1.jpeg",
+      uploadsUrl + "/2025/05/WhatsApp-Image-2025-04-24-at-15.13.51-1.jpeg",
+      uploadsUrl + "/2025/05/WhatsApp-Image-2025-04-24-at-15.13.53-1.jpeg",
+      uploadsUrl + "/2025/05/WhatsApp-Image-2025-04-24-at-15.14.02-1.jpeg",
+      uploadsUrl + "/2025/05/WhatsApp-Image-2025-04-24-at-15.14.14-1.jpeg",
+      uploadsUrl + "/2025/05/WhatsApp-Image-2025-04-24-at-15.14.37-1.jpeg",
+      uploadsUrl + "/2025/05/WhatsApp-Image-2025-04-24-at-15.14.49-1.jpeg",
+      uploadsUrl + "/2025/05/WhatsApp-Image-2025-04-24-at-15.14.52-2.jpeg",
+      uploadsUrl + "/2025/05/WhatsApp-Image-2025-04-24-at-15.15.00-1-1.jpeg",
+      uploadsUrl + "/2024/05/piano-tutor-header-program-bg.jpg",
+      uploadsUrl + "/2024/06/image-7-5.png",
+      uploadsUrl + "/2024/07/adff61a091a3317ac0d823ff0fec1790-scaled.jpeg",
+      uploadsUrl + "/2024/07/71be657984395351d27a26a6ca6dc2f3-scaled.jpeg"
+    ];
+    const index = getFixedIndexFromMusicName(musica.nome + musica.descricao, imagens.length) || 0
+    const defaultMusicUrl = imagens[index];
     item.className = "musica-card";
 
     item.innerHTML = `
-      <img src="${musica.imagem || defaultMusicUrl}" alt="${musica.nome}">
+      <img src="${musica.imagem || defaultMusicUrl}" alt="${musica.nome}" class="img-${index}">
       <div class="info">
         <h3>${musica.nome}</h3>
         <p>${musica.descricao.length > 75 ? (musica.descricao.substring(0, 75) + '...') : musica.descricao}</p>
         <p><strong>Tags:</strong> ${musica.artista}</p>
+        <p><strong>Sugestão:</strong> ${getMomentText(musica.momento).toLowerCase()}</p>
         <div class="botoes">
           <span class="estilo-tag">${musica.estilo}</span>
-          ${musica?.video ? '<a href="' + musica.video + '" target="_blank">Assistir vídeo</a>' : ''}
+          ${musica?.video ? '<a href="' + musica.video + '" target="_blank">Assistir</a>' : ''}
         </div>
       </div>
     `;
@@ -269,10 +295,8 @@ function renderizarMusicas(containerPrincipal, lista, listaMusicas, paginaAtual 
     paginacao.appendChild(botao);
   }
 
-  // Sempre mostra a primeira página
   adicionarBotao(1, null, paginaAtual === 1);
 
-  // Mostrar "..." após a página 1 se necessário
   if (paginaAtual > 4) {
     const pontos = document.createElement("span");
     pontos.textContent = "...";
@@ -280,14 +304,12 @@ function renderizarMusicas(containerPrincipal, lista, listaMusicas, paginaAtual 
     paginacao.appendChild(pontos);
   }
 
-  // Páginas ao redor da atual
   for (let i = paginaAtual - 1; i <= paginaAtual + 1; i++) {
     if (i > 1 && i < totalPaginas) {
       adicionarBotao(i, null, i === paginaAtual);
     }
   }
 
-  // Mostrar "..." antes da última página se necessário
   if (paginaAtual < totalPaginas - 3) {
     const pontos = document.createElement("span");
     pontos.textContent = "...";
@@ -295,7 +317,6 @@ function renderizarMusicas(containerPrincipal, lista, listaMusicas, paginaAtual 
     paginacao.appendChild(pontos);
   }
 
-  // Sempre mostra a última página (evita repetir se for a atual)
   if (totalPaginas > 1) {
     adicionarBotao(totalPaginas, null, paginaAtual === totalPaginas);
   }
@@ -328,7 +349,7 @@ function criaBotaoMomento(botaoFiltrar, momentDiv, txt, img, id) {
 }
 
 function getMusicasfromArray(musicasArray) {
-  // TODO: get imagem or generate random
+  // TODO: get image from api
   return musicasArray
     .map(m => ({ nome: m?.[0], momento: m?.[8], descricao: m?.[1], estilo: m?.[2], artista: m?.[4], video: m?.[5] || '', imagem: '' }))
     .filter((m) => m.nome && m.momento && m.descricao && m.estilo && m.artista)
@@ -343,4 +364,38 @@ async function getMusicasArray(tabs, sheet2JsonUrl, sheet) {
     musicasArray = [...musicasArray, ...musicas.slice(1).map(m => [...m, key])]
   }
   return musicasArray
+}
+
+function getFixedIndexFromMusicName(str, len) {
+  let hash = 2166136261;
+  for (let i = 0; i < str.length; i++) {
+    hash ^= str.charCodeAt(i);
+    hash = Math.imul(hash, 16777619);
+  }
+  return (hash >>> 0) % (len);
+}
+
+function getMomentText(moment) {
+  const momentosMap = {
+    entrada_noivo: "ENTRADA DO NOIVO",
+    entrada_pais: "ENTRADA DOS PAIS",
+    entrada_noiva: "ENTRADA DA NOIVA",
+    entrada_aliancas: "ENTRADA DAS ALIANÇAS",
+    entrada_padrinhos: "ENTRADA DOS PADRINHOS",
+    floristas: "FLORISTAS",
+    comunhao: "COMUNHÃO",
+    beijo: "BEIJO",
+    assinatura: "ASSINATURA",
+    saida: "SAÍDA",
+    cumprimentos: "CUMPRIMENTOS",
+    entrada_biblia: "ENTRADA DA BÍBLIA",
+    salmo: "SALMO",
+    santa_ceia: "SANTA CEIA",
+    entrada_sagrada_familia: "ENTRADA DA SAGRADA FAMÍLIA",
+    homenagem_falecido: "HOMENAGEM AO FALECIDO",
+    entrada_nossa_senhora: "ENTRADA DA NOSSA SENHORA",
+    aclamacao_evangelho: "ACLAMAÇÃO AO EVANGELHO",
+    oracao: "ORAÇÃO"
+  };
+  return (momentosMap[moment])
 }
