@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   containerPrincipal.appendChild(loading);
 
   // Musicas
-  const sheet = 'https://docs.google.com/spreadsheets/d/1Xr3zBjYQYFV9ACutlksbecSY3T5fWnkQAHGoob5juLo/edit'
+  const sheet = '1Xr3zBjYQYFV9ACutlksbecSY3T5fWnkQAHGoob5juLo'
   const sheet2JsonUrl = 'https://api.sheets2json.com/v1/doc/?url='
   let musicasArray = []
 
@@ -61,7 +61,11 @@ document.addEventListener("DOMContentLoaded", async function () {
   for (let i = 0; i < primeirosTabs.length; i++) {
     const tab = primeirosTabs[i][0];
     const key = primeirosTabs[i][1]
-    const musicas = await fetch(sheet2JsonUrl + `${sheet}&sheet=${tab}`).then(res => res.json())
+    const musicas = await fetchSheetData(sheet, tab)
+    musicasArray = [
+      ...musicasArray,
+      ...musicas.slice(1).map(m => [...m, key])
+    ];
     musicasArray = [...musicasArray, ...musicas.slice(1).map(m => [...m, key])]
   }
 
@@ -360,7 +364,7 @@ async function getMusicasArray(tabs, sheet2JsonUrl, sheet) {
   for (let i = 0; i < tabs.length; i++) {
     const tab = tabs[i][0];
     const key = tabs[i][1]
-    const musicas = await fetch(sheet2JsonUrl + `${sheet}&sheet=${tab}`).then(res => res.json())
+    const musicas = await fetchSheetData(sheet, tab)
     musicasArray = [...musicasArray, ...musicas.slice(1).map(m => [...m, key])]
   }
   return musicasArray
@@ -398,4 +402,28 @@ function getMomentText(moment) {
     oracao: "ORAÇÃO"
   };
   return (momentosMap[moment])
+}
+
+async function fetchSheetData(sheetId, tabName) {
+  try {
+    const proxy = "https://api.allorigins.win/get?url=";
+    const target = encodeURIComponent(`https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json&sheet=${tabName}`);
+    const url = proxy + target;
+
+    const res = await fetch(url);
+    const data = await res.json();
+
+    const text = data.contents;
+
+    const json = JSON.parse(text.substring(47).slice(0, -2));
+
+    const headers = json.table.cols.map(col => col.label);
+    const rows = json.table.rows;
+
+    return rows.map(row =>
+      headers.map((_, i) => row.c[i]?.v ?? '')
+    );
+  } catch (error) {
+    return []
+  }
 }
